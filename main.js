@@ -18,7 +18,6 @@ window.onload = async () => {
 
     micStream.connect(analyser);
 
-    console.log(window.sampleButton);
     window.sampleButton.addEventListener(
       "click",
       analyseSound(analyser, freqData)
@@ -35,14 +34,34 @@ window.onload = async () => {
  * @param {Uint8Array} freqData
  */
 const analyseSound = (analyser, freqData) => () => {
-  console.log("IN EVENT!");
   analyser.getByteFrequencyData(freqData);
 
-  const dataString = upToFirstNonLeadingZero(freqData).join(",");
+  const limitedData = upToFirstNonLeadingZero(freqData);
+
+  const maxFrequencyIndex = maxIndex(limitedData);
+
+  window.peakFreq.innerText = `${maxFrequencyIndex} (${limitedData[maxFrequencyIndex]})`;
 
   const pre = document.createElement("pre");
-  pre.innerText = dataString;
+  pre.innerText = limitedData.join(",");
   document.body.appendChild(pre);
+};
+
+/**
+ * [0, 1, 2, 3, 0, 4, 5, 0] => [0, 1, 2, 3]
+ * @param {Uint8Array} freqData
+ * @returns {number}
+ */
+const maxIndex = (freqData) => {
+  let result = -1;
+  let maxSoFar = null;
+  freqData.forEach((num, i) => {
+    if (num > maxSoFar) {
+      result = i;
+      maxSoFar = num;
+    }
+  });
+  return result;
 };
 
 /**
