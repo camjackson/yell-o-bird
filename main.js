@@ -18,12 +18,20 @@ window.onload = async () => {
 
     micStream.connect(analyser);
 
-    window.sampleButton.addEventListener(
-      "click",
-      analyseSound(analyser, freqData)
-    );
+    let interval = null;
+    window.startButton.addEventListener("click", () => {
+      if (interval === null) {
+        interval = setInterval(analyseSound(analyser, freqData), 1000);
+      }
+    });
+    window.stopButton.addEventListener("click", () => {
+      clearInterval(interval);
+      interval = null;
+    });
 
-    //setInterval(analyseSound(analyser, freqData), 1000);
+    window.clearButton.addEventListener("click", () => {
+      window.stats.innerHTML = "";
+    });
   } catch (err) {
     console.error("Failure!", err);
   }
@@ -44,7 +52,7 @@ const analyseSound = (analyser, freqData) => () => {
 
   const pre = document.createElement("pre");
   pre.innerText = limitedData.join(",");
-  document.body.appendChild(pre);
+  window.stats.appendChild(pre);
 };
 
 /**
