@@ -1,0 +1,78 @@
+{
+  "name": "svelte-app",
+  "license": "UNLICENSED",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public",
+    "test": "jest --watch",
+    "validate": "eslint src && tsc --noEmit && svelte-check",
+    "blah": "node node_modules/husky/husky.js install"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/svelte": "^3.0.0",
+    "@tsconfig/svelte": "^1.0.0",
+    "@types/jest": "^26.0.16",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "autoprefixer": "^10.0.4",
+    "eslint": "^7.15.0",
+    "eslint-plugin-jest-dom": "^3.6.2",
+    "eslint-plugin-testing-library": "^3.10.1",
+    "husky": ">=4.3.4",
+    "jest": "^26.6.3",
+    "lint-staged": ">=10.5.3",
+    "postcss": "^8.1.14",
+    "prettier": "^2.2.1",
+    "prettier-plugin-svelte": "^1.4.2",
+    "rollup": "^2.34.1",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-postcss": "https://github.com/isaacl/rollup-plugin-postcss#9095159",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "svelte": "^3.31.0",
+    "svelte-check": "^1.1.19",
+    "svelte-jester": "^1.1.5",
+    "svelte-preprocess": "^4.6.1",
+    "tailwindcss": "^2.0.1",
+    "ts-jest": "^26.4.4",
+    "tslib": "^2.0.3",
+    "typescript": "^4.1.2"
+  },
+  "dependencies": {
+    "sirv-cli": "^1.0.9"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && svelte-check"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,css,md,svelte}": "prettier --write",
+    "*.{js,ts}": "eslint"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.svelte$": [
+        "svelte-jester",
+        {
+          "preprocess": true
+        }
+      ],
+      "^.+\\.ts$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "svelte"
+    ],
+    "setupFilesAfterEnv": [
+      "./src/setupTests.ts"
+    ]
+  }
+}
