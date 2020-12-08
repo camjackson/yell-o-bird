@@ -1,18 +1,31 @@
 <script lang="ts">
-  export let name: string;
+  import { onMount } from 'svelte';
+  import Main from './Main.svelte';
+
+  let micFailed = false;
+  let analyser: AnalyserNode = null;
+
+  onMount(async () => {
+    try {
+      const audioContext = new AudioContext();
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      const micStream = audioContext.createMediaStreamSource(mediaStream);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 2048;
+
+      micStream.connect(analyser);
+    } catch (err) {
+      micFailed = true;
+    }
+  });
 </script>
 
-<style>
-  p {
-    color: green;
-  }
-</style>
-
-<main>
-  <h1 class="text-red-600">Hello {name}!</h1>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps.
-  </p>
-</main>
+{#if micFailed}
+  <section>Could not access microphone!</section>
+{:else if analyser === null}
+  <section>Waiting for access to microphone...</section>
+{:else}
+  <Main analyser="{analyser}" />
+{/if}
